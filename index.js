@@ -78,12 +78,12 @@ app.get("/Usuarios", async (req, resp) => {
     }
     await Usuario.create({
         Usuario_ID : Usuario_ID,
-        Nombre : Nombre,
+        Username : Username,
         Correo : Correo,
         Password : Password,
+        Nombre : Nombre,
         Apellido_Materno : Apellido_Materno,
-        Apellido_Paterno : Apellido_Paterno,
-        Username : Username,
+        Apellido_Paterno : Apellido_Paterno        
     })
     
     resp.send({
@@ -91,6 +91,31 @@ app.get("/Usuarios", async (req, resp) => {
     })
   })
   
+
+  app.post("/login", async (req,resp) => {
+    const correo = req.body.Correo
+    const contrasena = req.body.Password
+    const Usuario_ID = req.body.Usuario_ID
+    const usuario = await Usuario.findOne({
+        where : {
+            Correo : correo,
+            Password : contrasena,
+            Usuario_ID : Usuario_ID
+        }
+    })
+    if(usuario === null){
+        resp.send({
+            error : "Datos incorrectos",
+            errortxt : ERRORLOGIN
+        })
+    }else{
+        resp.send({
+            error : "",
+            token : correo,
+            usuarioID : Usuario_ID,
+        })
+    }
+})
 
 app.listen(PUERTO, () => {
   console.log(`Servidor web iniciado en el puerto ${PUERTO}`)
