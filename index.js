@@ -1,7 +1,7 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
-const { Usuario } = require("./dao")
+const { Usuario, Animal} = require("./dao")
 const PUERTO = 4444
 const app = express()
 const TOKEN = "HSDFOSHFHSDFSDHFJSHK"
@@ -214,6 +214,22 @@ app.post("/Modificar", async (req, resp) => {
         resp.send({ error: "Llenar" });
     }
 
+})
+
+
+app.get("/Animal", async (req, resp) => {
+    const animal = req.query.AnimalID
+    if (animal == undefined) {
+        const listaanimal = await Animal.findAll()
+        resp.send(listaanimal)
+    } else {
+        const listaanimal = await Animal.findAll({
+            where: {
+                AnimalID: animal
+            }
+        })
+        resp.send(listaanimal)
+    }
 })
 
 app.listen(PUERTO, () => {

@@ -40,7 +40,39 @@ const Usuario = sequelize.define("Usuario",{
     freezeTableName : true
 })
 
+const Animal = sequelize.define("Animal",{
+    AnimalID : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4,
+        allowNull : false
+    },
+    Nombre : {
+        type : DataTypes.STRING(25),
+        allowNull : true
+    },
+    NombreCientifico : {
+        type : DataTypes.STRING(50),
+        allowNull : true
+    },
+    Descripcion : {
+        type : DataTypes.STRING(150),
+        allowNull : true
+    },
+    Profundidad : {
+        type : DataTypes.INTEGER,
+        allowNull : true
+    },
+    Imagen : {
+        type : DataTypes.STRING(150),
+        allowNull : true
+    }
+}, {
+    timestamps : false,
+    freezeTableName : true
+})
+
 
 module.exports = {
-    Usuario
+    Usuario, Animal
 }
