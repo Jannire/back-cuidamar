@@ -8,11 +8,32 @@ const TOKEN = "HSDFOSHFHSDFSDHFJSHK"
 const usuarioID = ""
 const ERRORLOGIN = "Datos incorrectos"
 const crypto = require("crypto")
+
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }))
 app.use(cors())
+
+
+class Post{
+
+    constructor(Titulo, Cuerpo){
+        this.Titulo = Titulo;
+        this.Cuerpo = Cuerpo;
+    }
+}
+
+
+class Comentario{
+    
+    constructor(Contenido){
+
+    }
+
+}
 
 app.get("/Usuarios", async (req, resp) => {
     const usuario = req.query.Usuario_ID
@@ -76,7 +97,7 @@ app.post("/Usuarios", async (req, resp) => {
         return
     } else if (Nombre === "" || Correo === "" || Password === "" || Usuario_ID === "") {
         resp.send({
-            error: "Porfavor, complete todos los campos."
+            error: "Por favor, complete todos los campos."
         })
         return
     }
