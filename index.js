@@ -1,18 +1,22 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
-const { Usuario, Animal, Post} = require("./dao")
+const { Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post} = require("./dao")
 const PUERTO = 4444
 const app = express()
 const TOKEN = "HSDFOSHFHSDFSDHFJSHK"
 const usuarioID = ""
 const ERRORLOGIN = "Datos incorrectos"
 const crypto = require("crypto")
+
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }))
 app.use(cors())
+
 
 app.get("/Usuarios", async (req, resp) => {
     const usuario = req.query.Usuario_ID
@@ -76,7 +80,7 @@ app.post("/Usuarios", async (req, resp) => {
         return
     } else if (Nombre === "" || Correo === "" || Password === "" || Usuario_ID === "") {
         resp.send({
-            error: "Porfavor, complete todos los campos."
+            error: "Por favor, complete todos los campos."
         })
         return
     }
@@ -122,7 +126,7 @@ app.post("/login", async (req, resp) => {
     }
 })
 
-
+//REVISARRRR -----------------------------------------------------------------------------
 const generateObject = (username, correo, nombre, apellidoP, apellidoM, password) => {
     let atleastone = false;
     const object = {};
@@ -230,6 +234,69 @@ app.get("/Animal", async (req, resp) => {
         })
         resp.send(listaanimal)
     }
+})
+
+
+app.get("/Contaminante", async (req, resp) => {
+    const contaminante = req.query.ID_Contaminante
+    if (contaminante == undefined) {
+        const lista_contaminante = await Contaminante.findAll()
+        resp.send(lista_contaminante)
+    } else {
+        const lista_contaminante = await Contaminante.findAll({
+            where: {
+                ID_Contaminante: contaminante
+            }
+        })
+        resp.send(lista_contaminante)
+    }
+})
+
+app.get("/Comentario", async(req, resp) => {
+    const comentario = req.query.ID_Comentario
+    if (comentario == undefined) {
+        const lista_comentario = await Comentario.findAll()
+        resp.send(lista_comentario)
+    } else {
+        const lista_comentario = await Comentario.findAll({
+            where: {
+                ID_Comentario: comentario
+            }
+        })
+        resp.send(lista_comentario)
+    }
+})
+
+app.get("/Post", async(req, resp) =>{
+    const post = req.query.ID_Post
+    if (post == undefined) {
+        const lista_post = await Post.findAll()
+        resp.send(lista_post)
+    } else {
+        const lista_post = await Post.findAll({
+            where: {
+                ID_Post: post
+            }
+        })
+        resp.send(lista_post)
+    }
+
+})
+
+app.get("/Favoritos", async(req, resp) =>{
+    const favoritos = req.query.ID_Favoritos
+    if (favoritos == undefined) {
+        const lista_favoritos = await Post.findAll()
+        resp.send(lista_favoritos)
+    } else {
+        const lista_favoritos = await Post.findAll({
+            where: {
+                ID_Favoritos: favoritos
+            }
+        })
+        resp.send(lista_favoritos)
+    }
+
 })
 
 app.get("/Post", async (req, resp) => {
