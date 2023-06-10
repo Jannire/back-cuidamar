@@ -267,21 +267,6 @@ app.get("/Comentario", async(req, resp) => {
     }
 })
 
-app.get("/Post", async(req, resp) =>{
-    const post = req.query.ID_Post
-    if (post == undefined) {
-        const lista_post = await Post.findAll()
-        resp.send(lista_post)
-    } else {
-        const lista_post = await Post.findAll({
-            where: {
-                ID_Post: post
-            }
-        })
-        resp.send(lista_post)
-    }
-
-})
 
 app.get("/Favoritos", async(req, resp) =>{
     const favoritos = req.query.ID_Favoritos
@@ -297,6 +282,55 @@ app.get("/Favoritos", async(req, resp) =>{
         resp.send(lista_favoritos)
     }
 
+})
+
+app.get("/Post", async (req, resp) => {
+    const post = req.query.PostID
+    if (post == undefined) {
+        const listapost = await Post.findAll()
+        resp.send(listapost)
+    } else {
+        const listapost = await Post.findAll({
+            where: {
+                PostID: post
+            }
+        })
+        resp.send(listapost)
+    }
+})
+
+app.post("/Post", async (req,resp) => {
+    const PostID = crypto.randomUUID();
+    const Usuario_ID = req.body.Usuario_ID
+    const Cuerpo = req.body.Cuerpo
+    const Titulo = req.body.Titulo
+
+    const post = await Post.findAll({
+        where : {
+            Titulo : Titulo
+        }
+    })
+    if(post.length > 0){
+        resp.send({
+            error : "Ya hay un post con esa tematica!"
+        })
+        return
+    }else if(Usuario_ID ==="" || Cuerpo ==="" || Titulo ===""){
+        resp.send({
+            error : "Ingresa informacion para publicar!"
+        })
+        return
+    }
+    await Post.create({
+        PostID : PostID,
+        Usuario_ID : Usuario_ID,
+        Cuerpo : Cuerpo,
+        Titulo : Titulo
+    })
+    
+    resp.send({
+        error : ""
+    })
 })
 
 app.listen(PUERTO, () => {

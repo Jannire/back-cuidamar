@@ -9,7 +9,7 @@ const sequelize = new Sequelize(CADENA_CONEXION)
 class Usuario extends Model { }
 
 Usuario.init({
-    ID_Usuario: {
+    Usuario_ID: {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -54,7 +54,7 @@ Usuario.init({
 class Animal extends Model { }
 
 Animal.init({
-    ID_Animal: {
+    AnimalID: {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -69,7 +69,7 @@ Animal.init({
         allowNull: true
     },
     Descripcion: {
-        type: DataTypes.STRING(150),
+        type: DataTypes.STRING(1000),
         allowNull: true
     },
     Profundidad: {
@@ -89,7 +89,7 @@ Animal.init({
 class Contaminante extends Model {}
 
 Contaminante.init({
-    ID_Contaminante: {
+    ContaminanteID: {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -116,7 +116,7 @@ Contaminante.init({
 class Post extends Model{}
 
 Post.init({
-    ID_Post: {
+    PostID: {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -150,7 +150,7 @@ Usuario.hasMany(Post,{
 class Comentario extends Model {}
 
 Comentario.init({
-    ID_Comentario: {
+    ComentarioID: {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -175,27 +175,27 @@ Comentario.init({
 })
 
 Comentario.belongsTo(Usuario, {
-    foreignKey : "ID_Usuario"
+    foreignKey : "Usuario_ID"
 })
 Usuario.hasMany(Comentario,{
-    foreignKey : "ID_Usuario"
+    foreignKey : "Usuario_ID"
 })
 
 Comentario.belongsTo(Post, {
-    foreignKey : "ID_Post"
+    foreignKey : "Post_ID"
 })
 Post.hasMany(Comentario,{
-    foreignKey : "ID_Post"
+    foreignKey : "PostID"
 })
 
 class Afecta extends Model {}
 
 Afecta.init({
-    ID_Animal: {
+    AnimalID: {
         type: DataTypes.UUID,
         allowNull: false
     },
-    ID_Contaminante: {
+    ContaminanteID: {
         type: DataTypes.UUID,
         allowNull: false
     }
@@ -206,27 +206,27 @@ Afecta.init({
 })
 
 Afecta.belongsTo(Animal, {
-    foreignKey : "ID_Animal"
+    foreignKey : "AnimalID"
 })
 Animal.hasMany(Afecta,{
-    foreignKey : "ID_Animal"
+    foreignKey : "AnimalID"
 })
 
-Afecta.belongsTo(Animal, {
-    foreignKey : "ID_Animal"
+Afecta.belongsTo(Contaminante, {
+    foreignKey : "ContaminanteID"
 })
-Animal.hasMany(Afecta,{
-    foreignKey : "ID_Animal"
+Contaminante.hasMany(Afecta,{
+    foreignKey : "ContaminanteID"
 })
 
 class Favoritos extends Model {}
 
 Favoritos.init({
-    ID_Animal: {
+    AnimalID: {
         type: DataTypes.UUID,
         allowNull: false
     },
-    ID_Usuario: {
+    Usuario_ID: {
         type: DataTypes.UUID,
         allowNull: true
     }
@@ -237,17 +237,17 @@ Favoritos.init({
 })
 
 Favoritos.belongsTo(Usuario, {
-    foreignKey : "ID_Usuario"
+    foreignKey : "Usuario_ID"
 })
 Usuario.hasMany(Favoritos,{
-    foreignKey : "ID_Usuario"
+    foreignKey : "Usuario_ID"
 })
 
 Favoritos.belongsTo(Animal, {
-    foreignKey : "ID_Animal"
+    foreignKey : "AnimalID"
 })
 Animal.hasMany(Favoritos,{
-    foreignKey : "ID_Animal"
+    foreignKey : "AnimalID"
 })
 
 module.exports = {
