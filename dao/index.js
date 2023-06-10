@@ -1,9 +1,11 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 
-const CADENA_CONEXION = "postgresql://AdminCuidaMar:Cuidamar4444@localhost:5432/CuidaMar"
+const CADENA_CONEXION = "postgresql://AdminCuidaMar:Cuidamar4444@localhost:5432/Cuidamar"
 
 const sequelize = new Sequelize(CADENA_CONEXION)
 
+
+// Abstract factory - super usuarios y simpleton
 class Usuario extends Model { }
 
 Usuario.init({
@@ -36,6 +38,10 @@ Usuario.init({
     Password: {
         type: DataTypes.STRING(50),
         allowNull: true
+    },
+    Rol: {
+        type: DataTypes.STRING(50),
+        allowNull: true
     }
 }, {
     timestamps: false,
@@ -44,7 +50,7 @@ Usuario.init({
 }
 )
 
-// Abstract factory - super usuarios y simpleton
+
 class Animal extends Model { }
 
 Animal.init({
@@ -245,5 +251,5 @@ Animal.hasMany(Favoritos,{
 })
 
 module.exports = {
-    Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post
+    Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post, sequelize
 }
