@@ -238,14 +238,14 @@ app.get("/Animal", async (req, resp) => {
 
 
 app.get("/Contaminante", async (req, resp) => {
-    const contaminante = req.query.ID_Contaminante
+    const contaminante = req.query.ContaminanteID
     if (contaminante == undefined) {
         const lista_contaminante = await Contaminante.findAll()
         resp.send(lista_contaminante)
     } else {
         const lista_contaminante = await Contaminante.findAll({
             where: {
-                ID_Contaminante: contaminante
+                ContaminanteID: contaminante
             }
         })
         resp.send(lista_contaminante)
@@ -253,30 +253,44 @@ app.get("/Contaminante", async (req, resp) => {
 })
 
 app.get("/Comentario", async(req, resp) => {
-    const comentario = req.query.ID_Comentario
+    const comentario = req.query.ComentarioID
     if (comentario == undefined) {
         const lista_comentario = await Comentario.findAll()
         resp.send(lista_comentario)
     } else {
         const lista_comentario = await Comentario.findAll({
             where: {
-                ID_Comentario: comentario
+                ComentarioID: comentario
             }
         })
         resp.send(lista_comentario)
     }
 })
 
+app.get("/Comentario2", async(req, resp) => {
+    const comentario = req.query.PostID
+    if (comentario == undefined) {
+        const lista_comentario = await Comentario.findAll()
+        resp.send(lista_comentario)
+    } else {
+        const lista_comentario = await Comentario.findAll({
+            where: {
+                PostID: comentario
+            }
+        })
+        resp.send(lista_comentario)
+    }
+})
 
 app.get("/Favoritos", async(req, resp) =>{
-    const favoritos = req.query.ID_Favoritos
+    const favoritos = req.query.FavoritosID
     if (favoritos == undefined) {
         const lista_favoritos = await Post.findAll()
         resp.send(lista_favoritos)
     } else {
         const lista_favoritos = await Post.findAll({
             where: {
-                ID_Favoritos: favoritos
+                FavoritosID: favoritos
             }
         })
         resp.send(lista_favoritos)

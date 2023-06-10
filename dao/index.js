@@ -124,7 +124,7 @@ Post.init({
         type: DataTypes.STRING(500),
         allowNull: true
     },
-    ID_Usuario: {
+    Usuario_ID: {
         type: DataTypes.UUID,
         allowNull: true
     }
@@ -135,10 +135,10 @@ Post.init({
 })
 
 Post.belongsTo(Usuario, {
-    foreignKey : "ID_Usuario"
+    foreignKey : "Usuario_ID"
 })
 Usuario.hasMany(Post,{
-    foreignKey : "ID_Usuario"
+    foreignKey : "Usuario_ID"
 })
 
 class Comentario extends Model {}
@@ -154,11 +154,11 @@ Comentario.init({
         type: DataTypes.STRING(250),
         allowNull: true
     },
-    ID_Usuario: {
+    Usuario_ID: {
         type: DataTypes.UUID,
         allowNull: true
     },
-    ID_Post: {
+    PostID: {
         type: DataTypes.UUID,
         allowNull: true
     }
@@ -176,7 +176,7 @@ Usuario.hasMany(Comentario,{
 })
 
 Comentario.belongsTo(Post, {
-    foreignKey : "Post_ID"
+    foreignKey : "PostID"
 })
 Post.hasMany(Comentario,{
     foreignKey : "PostID"
