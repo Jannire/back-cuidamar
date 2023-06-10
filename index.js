@@ -1,7 +1,7 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
-const { Usuario, Animal} = require("./dao")
+const { Usuario, Animal, Post} = require("./dao")
 const PUERTO = 4444
 const app = express()
 const TOKEN = "HSDFOSHFHSDFSDHFJSHK"
@@ -230,6 +230,55 @@ app.get("/Animal", async (req, resp) => {
         })
         resp.send(listaanimal)
     }
+})
+
+app.get("/Post", async (req, resp) => {
+    const post = req.query.PostID
+    if (post == undefined) {
+        const listapost = await Post.findAll()
+        resp.send(listapost)
+    } else {
+        const listapost = await Post.findAll({
+            where: {
+                PostID: post
+            }
+        })
+        resp.send(listapost)
+    }
+})
+
+app.post("/Post", async (req,resp) => {
+    const PostID = crypto.randomUUID();
+    const Usuario_ID = req.body.Usuario_ID
+    const Cuerpo = req.body.Cuerpo
+    const Titulo = req.body.Titulo
+
+    const post = await Post.findAll({
+        where : {
+            Titulo : Titulo
+        }
+    })
+    if(post.length > 0){
+        resp.send({
+            error : "Ya hay un post con esa tematica!"
+        })
+        return
+    }else if(Usuario_ID ==="" || Cuerpo ==="" || Titulo ===""){
+        resp.send({
+            error : "Ingresa informacion para publicar!"
+        })
+        return
+    }
+    await Post.create({
+        PostID : PostID,
+        Usuario_ID : Usuario_ID,
+        Cuerpo : Cuerpo,
+        Titulo : Titulo
+    })
+    
+    resp.send({
+        error : ""
+    })
 })
 
 app.listen(PUERTO, () => {

@@ -48,7 +48,7 @@ const Animal = sequelize.define("Animal",{
         allowNull : false
     },
     Nombre : {
-        type : DataTypes.STRING(25),
+        type : DataTypes.STRING(50),
         allowNull : true
     },
     NombreCientifico : {
@@ -56,7 +56,7 @@ const Animal = sequelize.define("Animal",{
         allowNull : true
     },
     Descripcion : {
-        type : DataTypes.STRING(150),
+        type : DataTypes.STRING(1000),
         allowNull : true
     },
     Profundidad : {
@@ -72,7 +72,38 @@ const Animal = sequelize.define("Animal",{
     freezeTableName : true
 })
 
+const Post = sequelize.define("Post",{
+    PostID : {
+        primaryKey : true,
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4,
+        allowNull : false
+    },
+    Usuario_ID : {
+        type : DataTypes.UUID,
+        defaultValue : Sequelize.UUIDV4,
+        allowNull : false
+    },
+    Cuerpo : {
+        type : DataTypes.STRING(500),
+        allowNull : true
+    },
+    Titulo : {
+        type : DataTypes.STRING(75),
+        allowNull : true
+    }
+}, {
+    timestamps : false,
+    freezeTableName : true
+})
+
+Usuario.hasMany(Post,{
+    foreignKey : "Usuario_ID"
+})
+Post.belongsTo(Usuario,{
+    foreignKey : "Usuario_ID"
+})
 
 module.exports = {
-    Usuario, Animal
+    Usuario, Animal, Post
 }
