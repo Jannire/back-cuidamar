@@ -267,21 +267,6 @@ app.get("/Comentario", async(req, resp) => {
     }
 })
 
-app.get("/Post", async(req, resp) =>{
-    const post = req.query.ID_Post
-    if (post == undefined) {
-        const lista_post = await Post.findAll()
-        resp.send(lista_post)
-    } else {
-        const lista_post = await Post.findAll({
-            where: {
-                ID_Post: post
-            }
-        })
-        resp.send(lista_post)
-    }
-
-})
 
 app.get("/Favoritos", async(req, resp) =>{
     const favoritos = req.query.ID_Favoritos
