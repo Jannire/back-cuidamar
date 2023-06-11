@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 
-const CADENA_CONEXION = "postgresql://AdminCuidaMar:Cuidamar4444@localhost:5432/Cuidamar"
+const CADENA_CONEXION = "postgresql://AdminCuidaMar:Cuidamar4444@localhost:5432/CuidaMar"
 
 const sequelize = new Sequelize(CADENA_CONEXION)
 

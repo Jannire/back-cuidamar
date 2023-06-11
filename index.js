@@ -347,6 +347,24 @@ app.post("/Post", async (req,resp) => {
     })
 })
 
+app.post("/Comentario", async (req,resp) => {
+    const PostID = req.body.PostID
+    const Usuario_ID = req.body.Usuario_ID
+    const Contenido = req.body.Contenido
+    const ComentarioID = crypto.randomUUID();
+
+    await Comentario.create({
+        PostID : PostID,
+        Usuario_ID : Usuario_ID,
+        Contenido : Contenido,
+        ComentarioID : ComentarioID
+    })
+    
+    resp.send({
+        error : ""
+    })
+})
+
 app.listen(PUERTO, () => {
     console.log(`Servidor web iniciado en el puerto ${PUERTO}`)
 })
