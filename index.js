@@ -283,18 +283,34 @@ app.get("/Comentario2", async(req, resp) => {
 })
 
 app.get("/Favoritos", async(req, resp) =>{
-    const favoritos = req.query.FavoritosID
+    const favoritos = req.query.Usuario_ID
     if (favoritos == undefined) {
-        const lista_favoritos = await Post.findAll()
+        const lista_favoritos = await Favoritos.findAll()
         resp.send(lista_favoritos)
     } else {
-        const lista_favoritos = await Post.findAll({
+        const lista_favoritos = await Favoritos.findAll({
             where: {
-                FavoritosID: favoritos
+                Usuario_ID: favoritos
             }
         })
         resp.send(lista_favoritos)
     }
+
+})
+
+app.get("/Favoritos2", async(req, resp) =>{
+    const usuario = req.query.Usuario_ID
+    const animal = req.query.AnimalID
+    
+      
+        const lista_favoritos = await Favoritos.findAll({
+            where: {
+                Usuario_ID: usuario,
+                AnimalID : animal
+            }
+        })
+        resp.send(lista_favoritos)
+    
 
 })
 
@@ -351,17 +367,76 @@ app.post("/Comentario", async (req,resp) => {
     const PostID = req.body.PostID
     const Usuario_ID = req.body.Usuario_ID
     const Contenido = req.body.Contenido
+    const fecha = req.body.fecha
     const ComentarioID = crypto.randomUUID();
 
     await Comentario.create({
         PostID : PostID,
         Usuario_ID : Usuario_ID,
         Contenido : Contenido,
-        ComentarioID : ComentarioID
+        ComentarioID : ComentarioID,
+        fecha : fecha
     })
     
     resp.send({
         error : ""
+    })
+})
+
+app.delete("/Comentario2", async (req,resp) => {
+    const PostID = req.body.PostID
+    await Comentario.destroy({
+        where : {
+            PostID : PostID
+        }
+    })
+})
+app.delete("/Post", async (req,resp) => {
+    const PostID = req.body.PostID
+    await Post.destroy({
+        where : {
+            PostID : PostID
+        }
+    })
+})
+
+app.post("/Favoritos2", async (req,resp) => {
+    const FavoritosID = crypto.randomUUID();
+    const AnimalID = req.body.AnimalID
+    const Usuario_ID = req.body.Usuario_ID
+    const prueba = await Favoritos.findAll({
+        where: {
+            Usuario_ID : Usuario_ID,
+            AnimalID: AnimalID
+            
+        }
+    })
+    if (prueba.length > 0) {
+        resp.send({
+            error: "YA ES FAVORITO"
+        })
+        return
+    }
+    await Favoritos.create({
+        FavoritosID : FavoritosID,
+        Usuario_ID : Usuario_ID,
+        AnimalID : AnimalID
+        
+    })
+    
+    resp.send({
+        error : ""
+    })
+})
+
+app.delete("/Favoritos2", async (req,resp) => {
+    const Usuario_ID = req.body.Usuario_ID
+    const AnimalID = req.body.AnimalID
+    await Favoritos.destroy({
+        where : {
+            Usuario_ID : Usuario_ID,
+            AnimalID : AnimalID
+        }
     })
 })
 

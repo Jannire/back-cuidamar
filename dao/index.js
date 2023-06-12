@@ -167,6 +167,10 @@ Comentario.init({
     PostID: {
         type: DataTypes.UUID,
         allowNull: true
+    },
+    fecha: {
+        type: DataTypes.STRING(15),
+        allowNull: true
     }
 }, {
     timestamps: false,
@@ -222,7 +226,12 @@ Contaminante.hasMany(Afecta,{
 class Favoritos extends Model {}
 
 Favoritos.init({
-    AnimalID: {
+    FavoritosID: {
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false
+    },AnimalID: {
         type: DataTypes.UUID,
         allowNull: false
     },
