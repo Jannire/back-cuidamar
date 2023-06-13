@@ -18,35 +18,6 @@ app.use(bodyParser.urlencoded({
 app.use(cors())
 
 
-app.get("/Usuarios", async (req, resp) => {
-    const usuario = req.query.Usuario_ID
-    if (usuario == undefined) {
-        const listausuarios = await Usuario.findAll()
-        resp.send(listausuarios)
-    } else {
-        const listausuarios = await Usuario.findAll({
-            where: {
-                Usuario_ID: usuario
-            }
-        })
-        resp.send(listausuarios)
-    }
-})
-
-app.get("/Usuarios2", async (req, resp) => {
-    const usuario = req.query.Correo
-    if (usuario == undefined) {
-        const listausuarios = await Usuario.findAll()
-        resp.send(listausuarios)
-    } else {
-        const listausuarios = await Usuario.findAll({
-            where: {
-                Correo: usuario
-            }
-        })
-        resp.send(listausuarios)
-    }
-})
 
 app.post("/Usuarios", async (req, resp) => {
     const dataRequest = req.body
@@ -97,6 +68,37 @@ app.post("/Usuarios", async (req, resp) => {
     resp.send({
         error: ""
     })
+})
+
+
+app.get("/Usuarios", async (req, resp) => {
+    const usuario = req.query.Usuario_ID
+    if (usuario == undefined) {
+        const listausuarios = await Usuario.findAll()
+        resp.send(listausuarios)
+    } else {
+        const listausuarios = await Usuario.findAll({
+            where: {
+                Usuario_ID: usuario
+            }
+        })
+        resp.send(listausuarios)
+    }
+})
+
+app.get("/Usuarios2", async (req, resp) => {
+    const usuario = req.query.Correo
+    if (usuario == undefined) {
+        const listausuarios = await Usuario.findAll()
+        resp.send(listausuarios)
+    } else {
+        const listausuarios = await Usuario.findAll({
+            where: {
+                Correo: usuario
+            }
+        })
+        resp.send(listausuarios)
+    }
 })
 
 
