@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(cors())
 
-
+// USUARIO --------------------------------------------------------------------------------------------------------------------------
 
 app.post("/Usuarios", async (req, resp) => {
     const dataRequest = req.body
@@ -128,42 +128,6 @@ app.post("/login", async (req, resp) => {
     }
 })
 
-//REVISARRRR -----------------------------------------------------------------------------
-const generateObject = (username, correo, nombre, apellidoP, apellidoM, password) => {
-    let atleastone = false;
-    const object = {};
-    if (username.length > 0) {
-        object["Username"] = username;
-        atleastone = true;
-    }
-    if (correo.length > 0) {
-        object["Correo"] = correo;
-        atleastone = true;
-    }
-    if (nombre.length > 0) {
-        object["Nombre"] = nombre;
-        atleastone = true;
-    }
-    if (apellidoP.length > 0) {
-        object["Apellido_Paterno"] = apellidoP;
-        atleastone = true;
-    }
-    if (apellidoM.length > 0) {
-        object["Apellido_Materno"] = apellidoM;
-        atleastone = true;
-    }
-    if (password.length > 0) {
-        object["Password"] = password;
-        atleastone = true;
-    }
-
-    if (atleastone !== true) {
-        return "Error";
-    } else {
-        return object;
-    }
-}
-
 app.post("/Modificar", async (req, resp) => {
     let usuarioCorreo = [];
     let usuarioNickname = [];
@@ -222,6 +186,43 @@ app.post("/Modificar", async (req, resp) => {
 
 })
 
+//REVISARRRR -----------------------------------------------------------------------------
+const generateObject = (username, correo, nombre, apellidoP, apellidoM, password) => {
+    let atleastone = false;
+    const object = {};
+    if (username.length > 0) {
+        object["Username"] = username;
+        atleastone = true;
+    }
+    if (correo.length > 0) {
+        object["Correo"] = correo;
+        atleastone = true;
+    }
+    if (nombre.length > 0) {
+        object["Nombre"] = nombre;
+        atleastone = true;
+    }
+    if (apellidoP.length > 0) {
+        object["Apellido_Paterno"] = apellidoP;
+        atleastone = true;
+    }
+    if (apellidoM.length > 0) {
+        object["Apellido_Materno"] = apellidoM;
+        atleastone = true;
+    }
+    if (password.length > 0) {
+        object["Password"] = password;
+        atleastone = true;
+    }
+
+    if (atleastone !== true) {
+        return "Error";
+    } else {
+        return object;
+    }
+}
+
+// ANIMAL --------------------------------------------------------------------------------------------------------------------------
 
 app.get("/Animal", async (req, resp) => {
     const animal = req.query.AnimalID
@@ -235,52 +236,6 @@ app.get("/Animal", async (req, resp) => {
             }
         })
         resp.send(listaanimal)
-    }
-})
-
-
-app.get("/Contaminante", async (req, resp) => {
-    const contaminante = req.query.ContaminanteID
-    if (contaminante == undefined) {
-        const lista_contaminante = await Contaminante.findAll()
-        resp.send(lista_contaminante)
-    } else {
-        const lista_contaminante = await Contaminante.findAll({
-            where: {
-                ContaminanteID: contaminante
-            }
-        })
-        resp.send(lista_contaminante)
-    }
-})
-
-app.get("/Comentario", async(req, resp) => {
-    const comentario = req.query.ComentarioID
-    if (comentario == undefined) {
-        const lista_comentario = await Comentario.findAll()
-        resp.send(lista_comentario)
-    } else {
-        const lista_comentario = await Comentario.findAll({
-            where: {
-                ComentarioID: comentario
-            }
-        })
-        resp.send(lista_comentario)
-    }
-})
-
-app.get("/Comentario2", async(req, resp) => {
-    const comentario = req.query.PostID
-    if (comentario == undefined) {
-        const lista_comentario = await Comentario.findAll()
-        resp.send(lista_comentario)
-    } else {
-        const lista_comentario = await Comentario.findAll({
-            where: {
-                PostID: comentario
-            }
-        })
-        resp.send(lista_comentario)
     }
 })
 
@@ -314,6 +269,95 @@ app.get("/Favoritos2", async(req, resp) =>{
         resp.send(lista_favoritos)
     
 
+})
+
+app.post("/Favoritos2", async (req,resp) => {
+    const FavoritosID = crypto.randomUUID();
+    const AnimalID = req.body.AnimalID
+    const Usuario_ID = req.body.Usuario_ID
+    const prueba = await Favoritos.findAll({
+        where: {
+            Usuario_ID : Usuario_ID,
+            AnimalID: AnimalID
+            
+        }
+    })
+    if (prueba.length > 0) {
+        resp.send({
+            error: "YA ES FAVORITO"
+        })
+        return
+    }
+    await Favoritos.create({
+        FavoritosID : FavoritosID,
+        Usuario_ID : Usuario_ID,
+        AnimalID : AnimalID
+        
+    })
+    
+    resp.send({
+        error : ""
+    })
+})
+
+app.delete("/Favoritos2", async (req,resp) => {
+    const Usuario_ID = req.body.Usuario_ID
+    const AnimalID = req.body.AnimalID
+    await Favoritos.destroy({
+        where : {
+            Usuario_ID : Usuario_ID,
+            AnimalID : AnimalID
+        }
+    })
+})
+
+// CONTAMINANTE --------------------------------------------------------------------------------------------------------------------------
+
+app.get("/Contaminante", async (req, resp) => {
+    const contaminante = req.query.ContaminanteID
+    if (contaminante == undefined) {
+        const lista_contaminante = await Contaminante.findAll()
+        resp.send(lista_contaminante)
+    } else {
+        const lista_contaminante = await Contaminante.findAll({
+            where: {
+                ContaminanteID: contaminante
+            }
+        })
+        resp.send(lista_contaminante)
+    }
+})
+
+// FORO --------------------------------------------------------------------------------------------------------------------------
+
+app.get("/Comentario", async(req, resp) => {
+    const comentario = req.query.ComentarioID
+    if (comentario == undefined) {
+        const lista_comentario = await Comentario.findAll()
+        resp.send(lista_comentario)
+    } else {
+        const lista_comentario = await Comentario.findAll({
+            where: {
+                ComentarioID: comentario
+            }
+        })
+        resp.send(lista_comentario)
+    }
+})
+
+app.get("/Comentario2", async(req, resp) => {
+    const comentario = req.query.PostID
+    if (comentario == undefined) {
+        const lista_comentario = await Comentario.findAll()
+        resp.send(lista_comentario)
+    } else {
+        const lista_comentario = await Comentario.findAll({
+            where: {
+                PostID: comentario
+            }
+        })
+        resp.send(lista_comentario)
+    }
 })
 
 app.get("/Post", async (req, resp) => {
@@ -393,51 +437,12 @@ app.delete("/Comentario2", async (req,resp) => {
         }
     })
 })
+
 app.delete("/Post", async (req,resp) => {
     const PostID = req.body.PostID
     await Post.destroy({
         where : {
             PostID : PostID
-        }
-    })
-})
-
-app.post("/Favoritos2", async (req,resp) => {
-    const FavoritosID = crypto.randomUUID();
-    const AnimalID = req.body.AnimalID
-    const Usuario_ID = req.body.Usuario_ID
-    const prueba = await Favoritos.findAll({
-        where: {
-            Usuario_ID : Usuario_ID,
-            AnimalID: AnimalID
-            
-        }
-    })
-    if (prueba.length > 0) {
-        resp.send({
-            error: "YA ES FAVORITO"
-        })
-        return
-    }
-    await Favoritos.create({
-        FavoritosID : FavoritosID,
-        Usuario_ID : Usuario_ID,
-        AnimalID : AnimalID
-        
-    })
-    
-    resp.send({
-        error : ""
-    })
-})
-
-app.delete("/Favoritos2", async (req,resp) => {
-    const Usuario_ID = req.body.Usuario_ID
-    const AnimalID = req.body.AnimalID
-    await Favoritos.destroy({
-        where : {
-            Usuario_ID : Usuario_ID,
-            AnimalID : AnimalID
         }
     })
 })
