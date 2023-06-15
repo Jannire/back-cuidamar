@@ -38,10 +38,6 @@ Usuario.init({
     Password: {
         type: DataTypes.STRING(50),
         allowNull: true
-    },
-    Rol: {
-        type: DataTypes.STRING(50),
-        allowNull: true
     }
 }, {
     timestamps: false,
