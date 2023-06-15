@@ -143,7 +143,7 @@ Usuario.hasMany(Post,{
     foreignKey : "Usuario_ID"
 })
 
-
+class Comentario extends Model {}
 
 Comentario.init({
     ComentarioID: {
