@@ -191,6 +191,12 @@ Post.hasMany(Comentario,{
 class Afecta extends Model {}
 
 Afecta.init({
+    AfectaID: {
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false
+    },
     AnimalID: {
         type: DataTypes.UUID,
         allowNull: false
