@@ -8,6 +8,7 @@ const sequelize = new Sequelize(CADENA_CONEXION)
 // Abstract factory - super usuarios y simpleton
 class Usuario extends Model { }
 
+
 Usuario.init({
     Usuario_ID: {
         primaryKey: true,
@@ -37,6 +38,10 @@ Usuario.init({
     },
     Password: {
         type: DataTypes.STRING(50),
+        allowNull: true
+    },
+    Admin: {
+        type: DataTypes.BOOLEAN,
         allowNull: true
     }
 }, {
@@ -92,15 +97,46 @@ Contaminante.init({
         allowNull: false
     },
     Nombre: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(150),
         allowNull: true
     },
     Descripcion: {
-        type: DataTypes.STRING(1000),
+        type: DataTypes.STRING(500),
         allowNull: true
     },
     Imagen: {
-        type: DataTypes.STRING(300),
+        type: DataTypes.STRING(150),
+        allowNull: true
+    },
+    Profundidad: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    }
+}, {
+    timestamps: false,
+    freezeTableName: true,
+    sequelize
+})
+
+class Solicitud extends Model {}
+
+Solicitud.init({
+    SolicitudID: {
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false
+    },
+    Nombre: {
+        type: DataTypes.STRING(150),
+        allowNull: true
+    },
+    Descripcion: {
+        type: DataTypes.STRING(500),
+        allowNull: true
+    },
+    Imagen: {
+        type: DataTypes.STRING(150),
         allowNull: true
     }
 }, {
@@ -262,5 +298,5 @@ Animal.hasMany(Favoritos,{
 })
 
 module.exports = {
-    Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post, sequelize
+    Usuario, Animal, Contaminante, Afecta, Solicitud, Comentario, Favoritos, Post, sequelize
 }

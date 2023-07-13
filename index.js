@@ -1,15 +1,18 @@
-const express = require("express")
-const bodyParser = require("body-parser")
-const cors = require("cors")
-const { Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post} = require("./dao")
+
+
+const { Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post, Solicitud} = require("./dao")
 const PUERTO = 4444
-const app = express()
+
 const TOKEN = "HSDFOSHFHSDFSDHFJSHK"
 const usuarioID = ""
 const ERRORLOGIN = "Datos incorrectos"
 const crypto = require("crypto")
 
+const express = require("express")
+const bodyParser = require("body-parser")
+const cors = require("cors")
 
+const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -28,7 +31,7 @@ app.post("/Usuarios", async (req, resp) => {
     const Apellido_Materno = dataRequest.Apellido_Materno
     const Correo = dataRequest.Correo
     const Password = dataRequest.Password
-
+    const admin = dataRequest.Admin
     const usuarioRegister = await Usuario.findAll({
         where: {
             Correo: Correo
@@ -62,7 +65,8 @@ app.post("/Usuarios", async (req, resp) => {
         Password: Password,
         Nombre: Nombre,
         Apellido_Materno: Apellido_Materno,
-        Apellido_Paterno: Apellido_Paterno
+        Apellido_Paterno: Apellido_Paterno,
+        Admin : admin
     })
 
     resp.send({
