@@ -114,7 +114,7 @@ app.post("/login", async (req, resp) => {
         where: {
             Correo: correo,
             Password: contrasena,
-            Usuario_ID: Usuario_ID
+            Usuario_ID: Usuario_ID,
         }
     })
     if (usuario === null) {
@@ -127,7 +127,7 @@ app.post("/login", async (req, resp) => {
             error: "",
             token: correo,
             usuarioID: Usuario_ID,
-            fullCredentials: req.body
+            fullCredentials: {...req.body,admin: usuario.Admin}
         })
     }
 })
@@ -331,6 +331,38 @@ app.get("/Contaminante", async (req, resp) => {
         resp.send(lista_contaminante)
     }
 })
+/* REVISAR MÑN
+app.post("/Contaminante", async (req,resp) => {
+    const ContaminanteID = crypto.randomUUID();
+    const Nombre = req.body.nombre
+    const Descripcion = req.body.descripcion
+    const Imagen = req.body.imagen
+    const Profundidad = req.body.Profundidad
+
+    const prueba = await Contaminante.findAll({
+        where: {
+            Usuario_ID : Usuario_ID,
+        }
+    })
+    if (prueba.length > 0) {
+        resp.send({
+            error: "YA ES FAVORITO"
+        })
+        return
+    }
+    await Favoritos.create({
+        FavoritosID : FavoritosID,
+        Usuario_ID : Usuario_ID,
+        AnimalID : AnimalID
+        
+    })
+    
+    resp.send({
+        error : ""
+    })
+})*/
+
+
 // Solicitud de contaminante -----------------------------------------------------------------------------------------------------
 
 app.get("/Solicitud", async (req, resp) => {
@@ -348,6 +380,15 @@ app.get("/Solicitud", async (req, resp) => {
     }
 })
 
+app.delete("/Solicitud", async (req,resp) => {
+    const Solicitud_ID = req.body.SolicitudID
+    await Solicitud.destroy({
+        where : {
+            SolicitudID : Solicitud_ID,
+        }
+    })
+    resp.send("Solicitud eliminada")
+})
 
 // FORO --------------------------------------------------------------------------------------------------------------------------
 
