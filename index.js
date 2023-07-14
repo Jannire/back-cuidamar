@@ -331,6 +331,23 @@ app.get("/Contaminante", async (req, resp) => {
         resp.send(lista_contaminante)
     }
 })
+// Solicitud de contaminante -----------------------------------------------------------------------------------------------------
+
+app.get("/Solicitud", async (req, resp) => {
+    const solicitud = req.query.SolicitudID
+    if (solicitud == undefined) {
+        const lista_solicitud = await Solicitud.findAll()
+        resp.send(lista_solicitud)
+    } else {
+        const lista_solicitud = await Solicitud.findAll({
+            where: {
+                SolicitudID: solicitud
+            }
+        })
+        resp.send(lista_solicitud)
+    }
+})
+
 
 // FORO --------------------------------------------------------------------------------------------------------------------------
 
