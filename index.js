@@ -331,36 +331,41 @@ app.get("/Contaminante", async (req, resp) => {
         resp.send(lista_contaminante)
     }
 })
-/* REVISAR MÑN
+
 app.post("/Contaminante", async (req,resp) => {
     const ContaminanteID = crypto.randomUUID();
-    const Nombre = req.body.nombre
-    const Descripcion = req.body.descripcion
-    const Imagen = req.body.imagen
+    const Nombre = req.body.Nombre
+    const Descripcion = req.body.Descripcion
+    const Imagen = req.body.Imagen
     const Profundidad = req.body.Profundidad
+    const Contador = req.body.Contador
 
     const prueba = await Contaminante.findAll({
         where: {
-            Usuario_ID : Usuario_ID,
+            Nombre : Nombre,
         }
     })
     if (prueba.length > 0) {
-        resp.send({
-            error: "YA ES FAVORITO"
+        // Mañana revisar contador
+        resp.status(400).send({
+            error: "Ya existe"
         })
         return
     }
-    await Favoritos.create({
-        FavoritosID : FavoritosID,
-        Usuario_ID : Usuario_ID,
-        AnimalID : AnimalID
+    await Contaminante.create({
+        ContaminanteID : ContaminanteID,
+        Nombre : Nombre,
+        Descripcion: Descripcion,
+        Imagen: Imagen,
+        Profundidad: Profundidad,
+        Contador: Contador
         
     })
     
     resp.send({
         error : ""
     })
-})*/
+})
 
 
 // Solicitud de contaminante -----------------------------------------------------------------------------------------------------
