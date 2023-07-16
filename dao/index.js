@@ -140,7 +140,7 @@ Solicitud.init({
         allowNull: true
     },
     Imagen: {
-        type: DataTypes.STRING,
+        type: DataTypes.BLOB,
         allowNull: true
     }
 }, {

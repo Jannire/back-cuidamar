@@ -395,29 +395,38 @@ app.put("/Contaminante", async(req, resp) => {
 
 
 // Solicitud de contaminante -----------------------------------------------------------------------------------------------------
-app.post("/enviarSolicitud", async (req,resp) => {
+app.post("/enviarSolicitud", async (req, resp) => {
     const SolicitudID = crypto.randomUUID();
-    const Nombre = req.body.Nombre
-    const Descripcion = req.body.Descripcion
-    const Imagen = req.body.Imagen
-
-    if(Nombre === "" || Descripcion === ""){
-        resp.send({
-            error : "Ingresar mínimo nombre y descripcion."
-        })
-        return
+    const Nombre = req.body.Nombre;
+    const Descripcion = req.body.Descripcion;
+    const Imagen = req.body.Imagen;
+  
+    if (Nombre === "" || Descripcion === "") {
+      resp.send({
+        error: "Ingresar mínimo nombre y descripción.",
+      });
+      return;
     }
-    await Solicitud.create({
-        SolicitudID : SolicitudID,
-        Nombre : Nombre,
-        Descripcion : Descripcion,
-        Imagen : Imagen
-    })
-
-    resp.send({
-        error : ""
-    })
-})
+    const buffer = Buffer.from(Imagen, 'base64');
+  
+    try {
+      await Solicitud.create({
+        SolicitudID: SolicitudID,
+        Nombre: Nombre,
+        Descripcion: Descripcion,
+        Imagen: buffer,
+      });
+  
+      resp.send({
+        error: "",
+      });
+    } catch (error) {
+      console.error(error);
+      resp.send({
+        error: "Error tras la inserción de datos",
+      });
+    }
+  });
 
 app.get("/Solicitud", async (req, resp) => {
     const solicitud = req.query.SolicitudID
