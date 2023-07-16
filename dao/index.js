@@ -111,6 +111,10 @@ Contaminante.init({
     Profundidad: {
         type: DataTypes.INTEGER,
         allowNull: true
+    },
+    Contador:{
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, {
     timestamps: false,

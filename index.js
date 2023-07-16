@@ -333,7 +333,7 @@ app.get("/Contaminante", async (req, resp) => {
     }
 })
 
-app.post("/Contaminante", async (req,resp) => {
+app.post("/Contaminante", async (req, resp) => {
     const ContaminanteID = crypto.randomUUID();
     const Nombre = req.body.Nombre
     const Descripcion = req.body.Descripcion
@@ -365,6 +365,31 @@ app.post("/Contaminante", async (req,resp) => {
     
     resp.send({
         error : ""
+    })
+})
+
+app.put("/Contaminante", async(req, resp) => {
+    const Nombre = req.body.Nombre;
+    const ContaminanteID = req.body.ContaminanteID;
+
+    const contaminador = await Contaminante.findAll({
+        where: {
+            ContaminanteID: ContaminanteID,
+        }
+    })
+
+    cuenta = contaminador[0].Contador+1;
+
+    await Contaminante.update({
+        ContaminanteID : ContaminanteID,
+        Contador : cuenta,
+        Nombre: Nombre
+    },{where: {
+        ContaminanteID: ContaminanteID,
+    }})
+
+    resp.send({
+        error : "Hola"
     })
 })
 
