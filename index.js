@@ -14,8 +14,9 @@ const cors = require("cors")
 
 const app = express()
 
-app.use(bodyParser.json())
+app.use(express.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({
+    limit: '50mb',
     extended: true
 }))
 app.use(cors())
@@ -394,6 +395,29 @@ app.put("/Contaminante", async(req, resp) => {
 
 
 // Solicitud de contaminante -----------------------------------------------------------------------------------------------------
+app.post("/enviarSolicitud", async (req,resp) => {
+    const SolicitudID = crypto.randomUUID();
+    const Nombre = req.body.Nombre
+    const Descripcion = req.body.Descripcion
+    const Imagen = req.body.Imagen
+
+    if(Nombre === "" || Descripcion === ""){
+        resp.send({
+            error : "Ingresar mínimo nombre y descripcion."
+        })
+        return
+    }
+    await Solicitud.create({
+        SolicitudID : SolicitudID,
+        Nombre : Nombre,
+        Descripcion : Descripcion,
+        Imagen : Imagen
+    })
+
+    resp.send({
+        error : ""
+    })
+})
 
 app.get("/Solicitud", async (req, resp) => {
     const solicitud = req.query.SolicitudID
