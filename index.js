@@ -563,6 +563,15 @@ app.delete("/Comentario2", async (req,resp) => {
     })
 })
 
+app.delete("/Comentario", async (req,resp) => {
+    const ComentarioID = req.body.ComentarioID
+    await Comentario.destroy({
+        where : {
+            ComentarioID : ComentarioID
+        }
+    })
+})
+
 app.delete("/Post", async (req,resp) => {
     const PostID = req.body.PostID
     await Post.destroy({
