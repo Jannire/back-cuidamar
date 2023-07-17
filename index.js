@@ -353,6 +353,8 @@ app.post("/Contaminante", async (req, resp) => {
         })
         return
     }
+    const buffer = Buffer.from(Imagen, 'base64');
+
     await Contaminante.create({
         ContaminanteID : ContaminanteID,
         Nombre : Nombre,
@@ -364,7 +366,8 @@ app.post("/Contaminante", async (req, resp) => {
     })
     
     resp.send({
-        error : ""
+        error : "",
+        ContaminanteID : ContaminanteID
     })
 })
 
@@ -452,6 +455,46 @@ app.delete("/Solicitud", async (req,resp) => {
     })
     resp.send("Solicitud eliminada")
 })
+// AFECTA ----------------------------------------------------------------------------------
+app.post("/Afecta", async(req, resp) => {
+    const AfectaID = crypto.randomUUID();
+    const AnimalID = req.body.AnimalID;
+    const ContaminanteID = req.body.ContaminanteID;
+
+    const afecta = await Afecta.findAll({
+        where : {
+            AnimalID: AnimalID,
+            ContaminanteID : ContaminanteID
+        }
+    })
+    if (afecta.length > 0){
+        return resp.send({
+            error: "Ya existe esta conexion"
+        })
+    }
+    await Afecta.create({
+        AfectaID : AfectaID,
+        ContaminanteID : ContaminanteID,
+        AnimalID : AnimalID
+    })
+
+})
+
+app.get("/Afecta", async(req, resp) => {
+    const Afecta = req.query.AfectaID;
+    if(Afecta == undefined){
+        const lista_afectan = await Afecta.findAll();
+        resp.send(lista_afectan);
+    } else {
+        const lista_afectan = await Afecta.findAll({
+            where : {
+                AfectaID : Afecta
+            }
+        })
+        resp.send(lista_afectan);
+    }
+})
+
 
 // FORO --------------------------------------------------------------------------------------------------------------------------
 

@@ -105,7 +105,7 @@ Contaminante.init({
         allowNull: true
     },
     Imagen: {
-        type: DataTypes.STRING(150),
+        type: DataTypes.BLOB,
         allowNull: true
     },
     Profundidad: {
