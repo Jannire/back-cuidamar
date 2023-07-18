@@ -1,6 +1,6 @@
 
 
-const { Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post, Solicitud} = require("./dao")
+const { Usuario, Animal, Contaminante, Afecta, Comentario, Favoritos, Post, Solicitud } = require("./dao")
 const PUERTO = 4444
 
 const TOKEN = "HSDFOSHFHSDFSDHFJSHK"
@@ -14,7 +14,7 @@ const cors = require("cors")
 
 const app = express()
 
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({
     limit: '50mb',
     extended: true
@@ -67,7 +67,7 @@ app.post("/Usuarios", async (req, resp) => {
         Nombre: Nombre,
         Apellido_Materno: Apellido_Materno,
         Apellido_Paterno: Apellido_Paterno,
-        Admin : admin
+        Admin: admin
     })
 
     resp.send({
@@ -128,7 +128,7 @@ app.post("/login", async (req, resp) => {
             error: "",
             token: correo,
             usuarioID: Usuario_ID,
-            fullCredentials: {...req.body,admin: usuario.Admin}
+            fullCredentials: { ...req.body, admin: usuario.Admin }
         })
     }
 })
@@ -244,7 +244,7 @@ app.get("/Animal", async (req, resp) => {
     }
 })
 
-app.get("/Favoritos", async(req, resp) =>{
+app.get("/Favoritos", async (req, resp) => {
     const favoritos = req.query.Usuario_ID
     if (favoritos == undefined) {
         const lista_favoritos = await Favoritos.findAll()
@@ -260,31 +260,31 @@ app.get("/Favoritos", async(req, resp) =>{
 
 })
 
-app.get("/Favoritos2", async(req, resp) =>{
+app.get("/Favoritos2", async (req, resp) => {
     const usuario = req.query.Usuario_ID
     const animal = req.query.AnimalID
-    
-      
-        const lista_favoritos = await Favoritos.findAll({
-            where: {
-                Usuario_ID: usuario,
-                AnimalID : animal
-            }
-        })
-        resp.send(lista_favoritos)
-    
+
+
+    const lista_favoritos = await Favoritos.findAll({
+        where: {
+            Usuario_ID: usuario,
+            AnimalID: animal
+        }
+    })
+    resp.send(lista_favoritos)
+
 
 })
 
-app.post("/Favoritos2", async (req,resp) => {
+app.post("/Favoritos2", async (req, resp) => {
     const FavoritosID = crypto.randomUUID();
     const AnimalID = req.body.AnimalID
     const Usuario_ID = req.body.Usuario_ID
     const prueba = await Favoritos.findAll({
         where: {
-            Usuario_ID : Usuario_ID,
+            Usuario_ID: Usuario_ID,
             AnimalID: AnimalID
-            
+
         }
     })
     if (prueba.length > 0) {
@@ -294,24 +294,24 @@ app.post("/Favoritos2", async (req,resp) => {
         return
     }
     await Favoritos.create({
-        FavoritosID : FavoritosID,
-        Usuario_ID : Usuario_ID,
-        AnimalID : AnimalID
-        
+        FavoritosID: FavoritosID,
+        Usuario_ID: Usuario_ID,
+        AnimalID: AnimalID
+
     })
-    
+
     resp.send({
-        error : ""
+        error: ""
     })
 })
 
-app.delete("/Favoritos2", async (req,resp) => {
+app.delete("/Favoritos2", async (req, resp) => {
     const Usuario_ID = req.body.Usuario_ID
     const AnimalID = req.body.AnimalID
     await Favoritos.destroy({
-        where : {
-            Usuario_ID : Usuario_ID,
-            AnimalID : AnimalID
+        where: {
+            Usuario_ID: Usuario_ID,
+            AnimalID: AnimalID
         }
     })
 })
@@ -344,7 +344,7 @@ app.post("/Contaminante", async (req, resp) => {
 
     const prueba = await Contaminante.findAll({
         where: {
-            Nombre : Nombre,
+            Nombre: Nombre,
         }
     })
     if (prueba.length > 0) {
@@ -357,18 +357,18 @@ app.post("/Contaminante", async (req, resp) => {
     const buffer = Buffer.from(Imagen, 'base64');
 
     await Contaminante.create({
-        ContaminanteID : ContaminanteID,
-        Nombre : Nombre,
+        ContaminanteID: ContaminanteID,
+        Nombre: Nombre,
         Descripcion: Descripcion,
         Imagen: buffer,
         Profundidad: Profundidad,
         Contador: Contador
-        
+
     })
-    
+
     resp.send({
-        error : "",
-        ContaminanteID : ContaminanteID
+        error: "",
+        ContaminanteID: ContaminanteID
     })
 })
 
@@ -382,18 +382,20 @@ app.put("/Contaminante", async(req, resp) => {
         }
     })
 
-    cuenta = contaminador[0].Contador+1;
+    cuenta = contaminador[0].Contador + 1;
 
     await Contaminante.update({
         ContaminanteID : ContaminanteID,
         Contador : cuenta,
         Descripcion: Descripcion
-    },{where: {
-        ContaminanteID: ContaminanteID,
-    }})
+    }, {
+        where: {
+            ContaminanteID: ContaminanteID,
+        }
+    })
 
     resp.send({
-        error : "Hola"
+        error: "Hola"
     })
 })
 
@@ -404,33 +406,27 @@ app.post("/enviarSolicitud", async (req, resp) => {
     const Nombre = req.body.Nombre;
     const Descripcion = req.body.Descripcion;
     const Imagen = req.body.Imagen;
-  
+
     if (Nombre === "" || Descripcion === "") {
-      resp.send({
-        error: "Ingresar mínimo nombre y descripción.",
-      });
-      return;
+        resp.send({
+            error: "Ingresar mínimo nombre y descripción.",
+        });
+        return;
     }
     const buffer = Buffer.from(Imagen, 'base64');
-  
-    try {
-      await Solicitud.create({
+
+
+    await Solicitud.create({
         SolicitudID: SolicitudID,
         Nombre: Nombre,
         Descripcion: Descripcion,
         Imagen: buffer,
-      });
-  
-      resp.send({
+    });
+
+    resp.send({
         error: "",
-      });
-    } catch (error) {
-      console.error(error);
-      resp.send({
-        error: "Error tras la inserción de datos",
-      });
-    }
-  });
+    });
+});
 
 app.get("/Solicitud", async (req, resp) => {
     const solicitud = req.query.SolicitudID
@@ -447,64 +443,64 @@ app.get("/Solicitud", async (req, resp) => {
     }
 })
 
-app.delete("/Solicitud", async (req,resp) => {
+app.delete("/Solicitud", async (req, resp) => {
     const Solicitud_ID = req.body.SolicitudID
     await Solicitud.destroy({
-        where : {
-            SolicitudID : Solicitud_ID,
+        where: {
+            SolicitudID: Solicitud_ID,
         }
     })
     resp.send("Solicitud eliminada")
 })
 // AFECTA ----------------------------------------------------------------------------------
-app.post("/Afecta", async(req, resp) => {
+app.post("/Afecta", async (req, resp) => {
     const AfectaID = crypto.randomUUID();
     const AnimalID = req.body.AnimalID;
     const ContaminanteID = req.body.ContaminanteID;
 
     const afecta = await Afecta.findAll({
-        where : {
+        where: {
             AnimalID: AnimalID,
-            ContaminanteID : ContaminanteID
+            ContaminanteID: ContaminanteID
         }
     })
-    if (afecta.length > 0){
+    if (afecta.length > 0) {
         return resp.send({
             error: "Ya existe esta conexion"
         })
     }
     await Afecta.create({
-        AfectaID : AfectaID,
-        ContaminanteID : ContaminanteID,
-        AnimalID : AnimalID
+        AfectaID: AfectaID,
+        ContaminanteID: ContaminanteID,
+        AnimalID: AnimalID
     })
 
 })
 
-app.get("/Afecta", async(req, resp) => {
+app.get("/Afecta", async (req, resp) => {
     const Afecta = req.query.AfectaID;
-    if(Afecta == undefined){
+    if (Afecta == undefined) {
         const lista_afectan = await Afecta.findAll();
         resp.send(lista_afectan);
     } else {
         const lista_afectan = await Afecta.findAll({
-            where : {
-                AfectaID : Afecta
+            where: {
+                AfectaID: Afecta
             }
         })
         resp.send(lista_afectan);
     }
 })
 
-app.get("/Afecta2", async(req, resp) => {
+app.get("/Afecta2", async (req, resp) => {
     const contaminante = req.query.ContaminanteID;
-    if(contaminante == undefined){
+    if (contaminante == undefined) {
         const lista_afectan = await Afecta.findAll();
         resp.send(lista_afectan);
     } else {
         const lista_afectan = await Afecta.findAll({
-            where : {
-                ContaminanteID : contaminante
+            where: {
+                ContaminanteID: contaminante
             }
         })
         resp.send(lista_afectan);
@@ -512,7 +508,7 @@ app.get("/Afecta2", async(req, resp) => {
 })
 // FORO --------------------------------------------------------------------------------------------------------------------------
 
-app.get("/Comentario", async(req, resp) => {
+app.get("/Comentario", async (req, resp) => {
     const comentario = req.query.ComentarioID
     if (comentario == undefined) {
         const lista_comentario = await Comentario.findAll()
@@ -527,7 +523,7 @@ app.get("/Comentario", async(req, resp) => {
     }
 })
 
-app.get("/Comentario2", async(req, resp) => {
+app.get("/Comentario2", async (req, resp) => {
     const comentario = req.query.PostID
     if (comentario == undefined) {
         const lista_comentario = await Comentario.findAll()
@@ -557,41 +553,41 @@ app.get("/Post", async (req, resp) => {
     }
 })
 
-app.post("/Post", async (req,resp) => {
+app.post("/Post", async (req, resp) => {
     const PostID = crypto.randomUUID();
     const Usuario_ID = req.body.Usuario_ID
     const Cuerpo = req.body.Cuerpo
     const Titulo = req.body.Titulo
 
     const post = await Post.findAll({
-        where : {
-            Titulo : Titulo
+        where: {
+            Titulo: Titulo
         }
     })
-    if(post.length > 0){
+    if (post.length > 0) {
         resp.send({
-            error : "Ya hay un post con esa tematica!"
+            error: "Ya hay un post con esa tematica!"
         })
         return
-    }else if(Usuario_ID ==="" || Cuerpo ==="" || Titulo ===""){
+    } else if (Usuario_ID === "" || Cuerpo === "" || Titulo === "") {
         resp.send({
-            error : "Ingresa informacion para publicar!"
+            error: "Ingresa informacion para publicar!"
         })
         return
     }
     await Post.create({
-        PostID : PostID,
-        Usuario_ID : Usuario_ID,
-        Cuerpo : Cuerpo,
-        Titulo : Titulo
+        PostID: PostID,
+        Usuario_ID: Usuario_ID,
+        Cuerpo: Cuerpo,
+        Titulo: Titulo
     })
-    
+
     resp.send({
-        error : ""
+        error: ""
     })
 })
 
-app.post("/Comentario", async (req,resp) => {
+app.post("/Comentario", async (req, resp) => {
     const PostID = req.body.PostID
     const Usuario_ID = req.body.Usuario_ID
     const Contenido = req.body.Contenido
@@ -599,41 +595,41 @@ app.post("/Comentario", async (req,resp) => {
     const ComentarioID = crypto.randomUUID();
 
     await Comentario.create({
-        PostID : PostID,
-        Usuario_ID : Usuario_ID,
-        Contenido : Contenido,
-        ComentarioID : ComentarioID,
-        fecha : fecha
+        PostID: PostID,
+        Usuario_ID: Usuario_ID,
+        Contenido: Contenido,
+        ComentarioID: ComentarioID,
+        fecha: fecha
     })
-    
+
     resp.send({
-        error : ""
+        error: ""
     })
 })
 
-app.delete("/Comentario2", async (req,resp) => {
+app.delete("/Comentario2", async (req, resp) => {
     const PostID = req.body.PostID
     await Comentario.destroy({
-        where : {
-            PostID : PostID
+        where: {
+            PostID: PostID
         }
     })
 })
 
-app.delete("/Comentario", async (req,resp) => {
+app.delete("/Comentario", async (req, resp) => {
     const ComentarioID = req.body.ComentarioID
     await Comentario.destroy({
-        where : {
-            ComentarioID : ComentarioID
+        where: {
+            ComentarioID: ComentarioID
         }
     })
 })
 
-app.delete("/Post", async (req,resp) => {
+app.delete("/Post", async (req, resp) => {
     const PostID = req.body.PostID
     await Post.destroy({
-        where : {
-            PostID : PostID
+        where: {
+            PostID: PostID
         }
     })
 })
