@@ -373,8 +373,8 @@ app.post("/Contaminante", async (req, resp) => {
 })
 
 app.put("/Contaminante", async(req, resp) => {
-    const Nombre = req.body.Nombre;
     const ContaminanteID = req.body.ContaminanteID;
+    const Descripcion = req.body.Descripcion;
 
     const contaminador = await Contaminante.findAll({
         where: {
@@ -387,7 +387,7 @@ app.put("/Contaminante", async(req, resp) => {
     await Contaminante.update({
         ContaminanteID : ContaminanteID,
         Contador : cuenta,
-        Nombre: Nombre
+        Descripcion: Descripcion
     },{where: {
         ContaminanteID: ContaminanteID,
     }})
