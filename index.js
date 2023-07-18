@@ -334,6 +334,7 @@ app.get("/Contaminante", async (req, resp) => {
 })
 
 app.post("/Contaminante", async (req, resp) => {
+    console.log(req.body);
     const ContaminanteID = crypto.randomUUID();
     const Nombre = req.body.Nombre
     const Descripcion = req.body.Descripcion
@@ -359,7 +360,7 @@ app.post("/Contaminante", async (req, resp) => {
         ContaminanteID : ContaminanteID,
         Nombre : Nombre,
         Descripcion: Descripcion,
-        Imagen: Imagen,
+        Imagen: buffer,
         Profundidad: Profundidad,
         Contador: Contador
         
