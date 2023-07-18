@@ -496,7 +496,20 @@ app.get("/Afecta", async(req, resp) => {
     }
 })
 
-
+app.get("/Afecta2", async(req, resp) => {
+    const contaminante = req.query.ContaminanteID;
+    if(contaminante == undefined){
+        const lista_afectan = await Afecta.findAll();
+        resp.send(lista_afectan);
+    } else {
+        const lista_afectan = await Afecta.findAll({
+            where : {
+                ContaminanteID : contaminante
+            }
+        })
+        resp.send(lista_afectan);
+    }
+})
 // FORO --------------------------------------------------------------------------------------------------------------------------
 
 app.get("/Comentario", async(req, resp) => {
